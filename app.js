@@ -3,8 +3,8 @@
 // ============================================================
 
 // ── 1. SUPABASE SETUP ────────────────────────────────────────
-const SUPABASE_URL     = "https://kylwawpednkiwvyvjjfa.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5bHdhd3BlZG5raXd2eXZqamZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1MjY4MTksImV4cCI6MjA5MjEwMjgxOX0.PsyoCp3QapZTFyDvimIUZ3YijZsE4vsisIv8tVKjJCI";
+const SUPABASE_URL     = "https://hrdzaijxqqfcjbjwheiu.supabase.co/rest/v1/";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhyZHphaWp4cXFmY2piandoZWl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzUxNjgsImV4cCI6MjA5MjgxMTE2OH0.Ly9EmhgvJRxEFjZkMFfMJNicGnEBMl54gSi4nvKZHV0";
 
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
