@@ -3,7 +3,7 @@
 // ============================================================
 
 // ── 1. SUPABASE SETUP ────────────────────────────────────────
-const SUPABASE_URL     = "https://hrdzaijxqqfcjbjwheiu.supabase.co/rest/v1/";
+const SUPABASE_URL     = "https://hrdzaijxqqfcjbjwheiu.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhyZHphaWp4cXFmY2piandoZWl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzUxNjgsImV4cCI6MjA5MjgxMTE2OH0.Ly9EmhgvJRxEFjZkMFfMJNicGnEBMl54gSi4nvKZHV0";
 
 const { createClient } = supabase;
