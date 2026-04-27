@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Project Tasks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">✦</span>
+        <span class="logo-text">ProjectTasks</span>
+      </div>
+      <div class="header-meta">
+        <span id="today-date"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       ── REST A WHILE / SUDOKU SECTION ──
+       ══════════════════════════════════════════════════════════ -->
+  <section class="rest-zone" id="rest-zone">
+    <div class="rest-inner">
+      <div class="rest-heading-wrap">
+        <div class="rest-icon">♟</div>
+        <div>
+          <h2 class="rest-title">Rest A While</h2>
+          <p class="rest-sub">Take a brain break · Play Sudoku · Come back sharper</p>
+        </div>
+        <button class="rest-toggle-btn" onclick="toggleRestZone()" id="rest-toggle-btn">
+          ▲ Collapse
+        </button>
+      </div>
+
+      <div id="rest-content" class="rest-content">
+        <div class="sudoku-controls">
+          <div class="difficulty-row">
+            <span class="diff-label">Difficulty:</span>
+            <button class="diff-btn" data-diff="easy"   onclick="setSudokuDifficulty('easy')">Easy</button>
+            <button class="diff-btn active" data-diff="medium" onclick="setSudokuDifficulty('medium')">Medium</button>
+            <button class="diff-btn" data-diff="hard"   onclick="setSudokuDifficulty('hard')">Hard</button>
+          </div>
+          <div class="sudoku-info-row">
+            <div class="sudoku-stat-wrap">
+              <span class="sstat-label">Time</span>
+              <span class="sstat-val" id="sudoku-timer">00:00</span>
+            </div>
+            <div class="sudoku-stat-wrap">
+              <span class="sstat-label">Mistakes</span>
+              <span class="sstat-val" id="sudoku-mistakes">0</span>
+            </div>
+            <button class="btn-new-game" onclick="newSudokuGame()">↺ New Game</button>
+          </div>
+        </div>
+
+        <div class="sudoku-play-area">
+          <div class="sudoku-grid" id="sudoku-grid"></div>
+          <div class="sudoku-side">
+            <div class="sudoku-numpad" id="sudoku-numpad"></div>
+            <div class="sudoku-hint-text">
+              <p>↑ Click cell · tap number</p>
+              <p>Arrow keys to navigate</p>
+              <p>⌫ clears selected cell</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sudoku-message hidden" id="sudoku-message"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MAIN ── -->
+  <main class="container">
+
+    <!-- Page Title -->
+    <section class="page-hero">
+      <h1 class="page-title">Your Tasks</h1>
+      <p class="page-sub">Stay organized. Stay ahead.</p>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+      <div class="stat-card">
+        <span class="stat-num" id="stat-total">0</span>
+        <span class="stat-label">Total</span>
+      </div>
+      <div class="stat-card accent-pending">
+        <span class="stat-num" id="stat-pending">0</span>
+        <span class="stat-label">Pending</span>
+      </div>
+      <div class="stat-card accent-done">
+        <span class="stat-num" id="stat-done">0</span>
+        <span class="stat-label">Completed</span>
+      </div>
+      <div class="stat-card">
+        <div class="progress-ring-wrap">
+          <svg class="ring" viewBox="0 0 36 36">
+            <circle class="ring-bg" cx="18" cy="18" r="15.9"/>
+            <circle class="ring-fill" id="ring-fill" cx="18" cy="18" r="15.9"
+              stroke-dasharray="0 100" stroke-dashoffset="25"/>
+          </svg>
+          <span class="ring-pct" id="ring-pct">0%</span>
+        </div>
+        <span class="stat-label">Progress</span>
+      </div>
+    </section>
+
+    <!-- Add Task Form -->
+    <section class="add-task-section">
+      <div class="add-card">
+        <h2 class="add-heading">Add a new task</h2>
+        <div class="add-row">
+          <input type="text" id="task-input" class="task-input"
+            placeholder="e.g. Design the landing page…" maxlength="200"/>
+          <select id="priority-select" class="priority-select">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+          </select>
+          <button id="add-btn" class="btn-add" onclick="addTask()">
+            <span>+ Add</span>
+          </button>
+        </div>
+        <p class="input-hint" id="input-error"></p>
+      </div>
+    </section>
+
+    <!-- Filter Tabs -->
+    <div class="filter-row">
+      <button class="filter-btn active" data-filter="all"     onclick="setFilter('all')">All</button>
+      <button class="filter-btn"        data-filter="pending" onclick="setFilter('pending')">Pending</button>
+      <button class="filter-btn"        data-filter="done"    onclick="setFilter('done')">Completed</button>
+      <div class="spacer"></div>
+      <button class="btn-clear-done" onclick="clearCompleted()">Clear completed</button>
+    </div>
+
+    <!-- Task List -->
+    <section id="task-list" class="task-list"></section>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="empty-state hidden">
+      <div class="empty-icon">◎</div>
+      <p class="empty-title">Nothing here yet</p>
+      <p class="empty-sub">Add your first task above to get started.</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ── DAILY NOTES — Day 1 to Day 7 ──
+         ══════════════════════════════════════════════════════════ -->
+    <section class="notes-section">
+      <div class="section-divider"><span class="divider-line"></span><span class="divider-icon">✦</span><span class="divider-line"></span></div>
+      <div class="notes-header">
+        <h2 class="notes-title">Daily Notes</h2>
+        <p class="notes-sub">A 7-day journal — record your thoughts, wins, and plans each day.</p>
+      </div>
+
+      <!-- Day tabs: Day 1 – Day 7 -->
+      <div class="day-tabs-wrap" id="day-tabs"></div>
+
+      <div class="note-editor-card">
+        <div class="note-editor-header">
+          <span class="active-day-label" id="active-day-label">Day 1 Notes</span>
+          <label class="done-label-wrap">
+            <input type="checkbox" id="note-day-checkbox" class="day-checkbox" onchange="toggleDayComplete()"/>
+            <span class="done-checkmark">✓</span>
+            <span class="done-label-text">Mark day complete</span>
+          </label>
+        </div>
+        <textarea id="note-textarea" class="note-textarea"
+          placeholder="Write your notes, reflections, wins, or plans for this day…&#10;&#10;What did you accomplish today?&#10;What will you do differently tomorrow?&#10;Ideas, observations, goals — anything goes."
+          maxlength="2000" oninput="onNoteInput()"></textarea>
+        <div class="note-editor-footer">
+          <span class="note-char-count" id="note-char-count">0 / 2000 characters</span>
+          <div class="note-footer-actions">
+            <button class="btn-clear-note" onclick="clearCurrentNote()">Clear</button>
+            <button class="btn-save-note"  onclick="saveNote()">Save Notes ✓</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ── AI CHATBOT ──
+         ══════════════════════════════════════════════════════════ -->
+    <section class="chatbot-section">
+      <div class="section-divider"><span class="divider-line"></span><span class="divider-icon">✦</span><span class="divider-line"></span></div>
+
+      <div class="chatbot-card">
+        <div class="chatbot-header">
+          <div class="chatbot-avatar">◎</div>
+          <div class="chatbot-title-wrap">
+            <h2 class="chatbot-title">Ask Anything</h2>
+            <p class="chatbot-sub">AI-powered assistant · jogging, habits, science, focus, and more</p>
+          </div>
+          <div class="chatbot-status-wrap">
+            <span class="status-dot"></span>
+            <span class="status-label">Powered by Claude</span>
+          </div>
+        </div>
+
+        <!-- API Key setup (shown when key not set) -->
+        <div class="api-key-prompt" id="api-key-prompt">
+          <div class="api-key-body">
+            <span class="api-key-emoji">🔑</span>
+            <div>
+              <p class="api-key-heading">Activate your AI Assistant</p>
+              <p class="api-key-info">
+                Enter your Anthropic API key below. It's only saved for this browser session — never stored permanently.
+              </p>
+            </div>
+          </div>
+          <div class="api-key-row">
+            <input type="password" id="api-key-input" class="task-input api-key-field"
+              placeholder="sk-ant-api03-…"
+              onkeydown="if(event.key==='Enter') setApiKey()"/>
+            <button class="btn-activate" onclick="setApiKey()">Activate ✦</button>
+          </div>
+          <p class="api-key-hint">
+            Get a free key at
+            <a href="https://console.anthropic.com" target="_blank" rel="noopener">console.anthropic.com</a>
+          </p>
+        </div>
+
+        <!-- Chat messages area -->
+        <div class="chat-messages" id="chat-messages"></div>
+
+        <!-- Suggested prompts (shown when chat is empty) -->
+        <div class="chat-suggestions" id="chat-suggestions">
+          <button class="suggestion-chip" onclick="useSuggestion(this)">🏃 Jogging tips for beginners</button>
+          <button class="suggestion-chip" onclick="useSuggestion(this)">🧠 How to improve focus</button>
+          <button class="suggestion-chip" onclick="useSuggestion(this)">💡 Explain photosynthesis</button>
+          <button class="suggestion-chip" onclick="useSuggestion(this)">📅 7-day study plan</button>
+        </div>
+
+        <!-- Chat input bar -->
+        <div class="chat-input-row">
+          <input type="text" id="chat-input" class="chat-input"
+            placeholder="Ask anything — jogging tips, science facts, how to focus…"/>
+          <button class="btn-send" onclick="sendChatMessage()" title="Send message">↑</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── TOAST ── -->
+  <div id="toast" class="toast"></div>
+
+  <!-- ── EDIT MODAL ── -->
+  <div id="modal-overlay" class="modal-overlay hidden" onclick="closeModal(event)">
+    <div class="modal-card">
+      <h3 class="modal-title">Edit task</h3>
+      <input type="text" id="modal-input" class="task-input" maxlength="200"/>
+      <select id="modal-priority" class="priority-select" style="margin-top:12px;width:100%"></select>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModalDirect()">Cancel</button>
+        <button class="btn-save"   onclick="saveEdit()">Save changes</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+</body>
+</html>
